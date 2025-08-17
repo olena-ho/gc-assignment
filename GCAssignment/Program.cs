@@ -4,24 +4,32 @@ using GCAssignment;
 Console.OutputEncoding = Encoding.UTF8;
 Console.InputEncoding = Encoding.UTF8;
 
-var p1 = new Play("Лісова пісня", "Леся Українка", "Драма-феєрія", 1911);
-var p2 = new Play("Гамлет", "Вільям Шекспір", "Трагедія", 1601);
-Console.WriteLine(p1);
-Console.WriteLine(p2);
-
-using (var s1 = new Shop("АТБ", "вул. Каштанова, 10", ShopType.Groceries))
+//Best practice: using → Dispose() gets called, finalizer suppressed
+using (var p = new Play("Кассандра", "Леся Українка", "Драма", 1907))
 {
-    Console.WriteLine(s1);
+    Console.WriteLine(p);
 }
 
+using (var s = new Shop("Dolce", "вул. Хрещатик, 15", ShopType.Footwear))
+{
+    Console.WriteLine(s);
+}
 
-var s2 = new Shop("Zara", "пр. Червоної Калини, 3", ShopType.Clothing);
-Console.WriteLine(s2);
-s2.Dispose();
+//What hapens when we don't use using and forget to dispose manually: "forgotten" objects are created in a separate method to make sure they are out of scope at the end
+CreateForgottenObjects();
 
-p1 = null;
-p2 = null;
+// force GC so we can see finalizers work
 GC.Collect();
 GC.WaitForPendingFinalizers();
 
+Console.WriteLine("Press Enter to exit...");
 Console.ReadLine();
+
+static void CreateForgottenObjects()
+{
+    var forgottenPlay = new Play("Лісова пісня", "Леся Українка", "Драма-феєрія", 1911);
+    var forgottenShop = new Shop("АТБ", "вул. Каштанова, 10", ShopType.Groceries);
+    Console.WriteLine(forgottenPlay);
+    Console.WriteLine(forgottenShop);
+    // no Dispose(), no return → after this method returns they’re collectible
+}

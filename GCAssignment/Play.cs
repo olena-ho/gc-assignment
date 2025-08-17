@@ -1,11 +1,12 @@
 ﻿namespace GCAssignment;
 
-public class Play
+public class Play : IDisposable
 {
     public string Title { get; }
     public string AuthorFullName { get; }
     public string Genre { get; }
     public int Year { get; }
+    private bool _disposed;
 
     public Play(string title, string authorFullName, string genre, int year)
     {
@@ -26,7 +27,31 @@ public class Play
 
     ~Play()
     {
-        //to show that destructor works
-        Console.WriteLine($"Play '{Title}' will be finalized by GC.");
+        Dispose(disposing: false);
+    }
+
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed) return;
+
+        if (disposing)
+        {
+            // managed cleanup (none now)
+            Console.WriteLine($"Play '{Title}' disposed (via Dispose/using).");
+        }
+        else
+        {
+            // finalizer path
+            Console.WriteLine($"Play '{Title}' cleaned up by finalizer.");
+        }
+
+        // unmanaged cleanup (none now)
+        _disposed = true;
     }
 }

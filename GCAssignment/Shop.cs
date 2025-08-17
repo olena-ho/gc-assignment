@@ -30,12 +30,28 @@ public class Shop : IDisposable
 
     public override string ToString() => $"{Name} ({Type}) — {Address}";
 
+    ~Shop()
+    {
+        Dispose(disposing: false);
+    }
     public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
     {
         if (_disposed) return;
 
-        // No resources to free right now - just demonstration
-        Console.WriteLine($"Shop '{Name}' disposed.");
+        if (disposing)
+        {
+            Console.WriteLine($"Shop '{Name}' disposed (via Dispose/using).");
+        }
+        else
+        {
+            Console.WriteLine($"Shop '{Name}' cleaned up by finalizer.");
+        }
 
         _disposed = true;
     }

@@ -8,16 +8,28 @@ The solution is structured around three tasks, but the work is split into **two 
 
 ## Commit 1 — Tasks 1 & 2
 
-- **Task 1: Class `Play`**
-  - Stores play information: title, author’s full name, genre, and year.
-  - Includes validation for input values.
-  - Implements a **destructor** (`~Play`) to demonstrate how finalizers are called by the Garbage Collector.
+- **Task 1: `Play`**
+  - Stores: title, author’s full name, genre, year.
+  - Input validation.
+  - Implements a **destructor** (`~Play`) to demonstrate finalization.
   - Tested in `Program.cs`.
 
-- **Task 2: Class `Shop`**
-  - Stores shop information: name, address, and type (enum: Groceries, Household, Clothing, Footwear).
-  - Implements the **IDisposable** interface.
-  - Demonstrates resource cleanup through:
-    - `Dispose()` called explicitly.
-    - `Dispose()` called automatically via the `using` statement.
+- **Task 2: `Shop`**
+  - Stores: name, address, type (enum: Groceries, Household, Clothing, Footwear).
+  - Implements **IDisposable**.
+  - Cleanup shown via:
+    - Explicit `Dispose()`.
+    - `using` statement (calls `Dispose()` automatically).
   - Tested in `Program.cs`.
+
+  ---
+
+## Commit 2 — Task 3
+
+- **`Play`** now also implements **IDisposable** (full dispose pattern **with** destructor).
+- **`Shop`** is extended with a **destructor** in addition to IDisposable.
+- `Program.cs` shows both paths:
+  - Best practice: `using` → deterministic `Dispose()`; finalizer suppressed.
+  - Demo: "forgotten" objects created in a helper method, then `GC.Collect()` + `GC.WaitForPendingFinalizers()` to **visually demonstrate** finalizers.
+
+---
