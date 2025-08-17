@@ -1,4 +1,8 @@
-﻿using GCAssignment;
+﻿using System.Text;
+using GCAssignment;
+
+Console.OutputEncoding = Encoding.UTF8;
+Console.InputEncoding = Encoding.UTF8;
 
 var p1 = new Play("Лісова пісня", "Леся Українка", "Драма-феєрія", 1911);
 var p2 = new Play("Гамлет", "Вільям Шекспір", "Трагедія", 1601);
